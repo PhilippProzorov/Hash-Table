@@ -22,7 +22,7 @@ public class Tests {
 
     @Test
     public void checkInput() {
-        HashTable<String, String> hashTable = new HashTable<String, String>();
+        HashTable<String, String> hashTable = new HashTable<>();
         hashTable.put("key", "value");
         String value = hashTable.get("key");
         assertEquals(1, hashTable.size());
@@ -32,7 +32,7 @@ public class Tests {
 
     @Test
     public void remove() {
-        HashTable<String, String> hashTable = new HashTable<String, String>();
+        HashTable<String, String> hashTable = new HashTable<>();
         hashTable.put("key", "value");
         String value = hashTable.remove("key");
         assertEquals("value", value);
@@ -43,7 +43,7 @@ public class Tests {
 
     @Test
     public void addHighQuantity() {
-        HashTable<String, String> hashTable = new HashTable<String, String>();
+        HashTable<String, String> hashTable = new HashTable<>();
         Map<String, String> map = new HashMap<>();
         putTemplate(hashTable);
         assertEquals(map, hashTable);
@@ -64,7 +64,7 @@ public class Tests {
 
     @Test
     public void checkCollisions() {
-        HashTable<String, String> hashTable = new HashTable<String, String>();
+        HashTable<String, String> hashTable = new HashTable<>();
         hashTable.put("key33", "value33");
         hashTable.put("key333", "value333");
         assertEquals(2, hashTable.size());
@@ -75,7 +75,7 @@ public class Tests {
 
     @Test
     public void returnNull() {
-        HashTable<String, String> hashTable = new HashTable<String, String>();
+        HashTable<String, String> hashTable = new HashTable<>();
         String oldValue = hashTable.put("key", "value1");
         assertNull(oldValue);
         assertEquals(1, hashTable.size());
@@ -83,7 +83,7 @@ public class Tests {
 
     @Test
     public void returnOld() {
-        HashTable<String, String> hashTable = new HashTable<String, String>();
+        HashTable<String, String> hashTable = new HashTable<>();
         hashTable.put("key", "value1");
         String old = hashTable.put("key", "value2");
         assertEquals("value1", old);
