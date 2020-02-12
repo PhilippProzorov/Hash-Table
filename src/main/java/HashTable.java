@@ -9,7 +9,7 @@ public class HashTable<K, V> implements Map<K, V> {
     private int capacity;
     private int currentlyOccupied;
     private HashEntry[] pair;
-    private HashEntry<K, V> Tombstone = new HashEntry<>(null, null);
+    private HashEntry<K, V> tombstone = new HashEntry<>(null, null);
     private int sizeDefault = 29;
 
     @Override
@@ -52,23 +52,23 @@ public class HashTable<K, V> implements Map<K, V> {
         pair = new HashEntry[this.capacity];
         this.size = 0;
         this.currentlyOccupied = 0;
-    }//NOTE: Setting up a blank template
+    }//NOTE: SETTING UP A BLANK TEMPLATE
 
-    private int hash1(K key) {
+    private int initialHash(K key) {
         return Math.abs(key.hashCode() % capacity);
     }
-    private int hash2(K key) {
+    private int linearFunction(K key) {
         return Math.abs(5 - key.hashCode() % 5);
     }
-    private int prob(K key, int x) {
-        return x * hash2(key);
+    private int probe(K key, int x) {
+        return x * linearFunction(key);
     }
 
     private int search(K key) {
         int value = 1;
-        int index = hash1(key);
+        int index = initialHash(key);
         while ((pair[index] != null) && (!Objects.equals(pair[index].getKey(), key))) {
-            index = (hash1(key) + prob(key, value)) % capacity;
+            index = (initialHash(key) + probe(key, value)) % capacity;
             value += 1;
         }
         return index;
@@ -87,11 +87,11 @@ public class HashTable<K, V> implements Map<K, V> {
                 throw new IllegalStateException("Duplicate key");
             }
         }
-        int RESIZE_FACTOR = 2;
-        int biggerCapacity = BigInteger.valueOf(map.size() * RESIZE_FACTOR).nextProbablePrime().intValue();
+        int resize = 2;
+        int biggerCapacity = BigInteger.valueOf(map.size() * resize).nextProbablePrime().intValue();
         initialize(biggerCapacity);
         putAll(map);
-    }//NOTE: In case the number of elements is too much
+    }//NOTE: IN CASE THE NUMBER OF ELEMENTS IS TOO MUCH
 
     @Override
     public V put(K key, V value) {
@@ -113,13 +113,13 @@ public class HashTable<K, V> implements Map<K, V> {
 
     @Override
     public V remove(Object key) {
-        V oldValue;
         int index = search((K) key);
+        V oldValue;
         if (pair[index] == null) {
             return null;
         } else {
             oldValue = (V) pair[index].getValue();
-            pair[index] = Tombstone; //NOTE: Marks that this index might have contained something previously
+            pair[index] = tombstone; //NOTE: MARKS THAT THIS INDEX MIGHT HAVE CONTAINED SOMETHING PREVIOUSLY
             size--;
         }
         return oldValue;
@@ -136,7 +136,7 @@ public class HashTable<K, V> implements Map<K, V> {
     public Set<Entry<K, V>> entrySet() {
         Set<Entry<K, V>> set = new LinkedHashSet<>(size);
         for (HashEntry entry : pair) {
-            if (!(entry == null || Objects.equals(entry, Tombstone))) {
+            if (!(entry == null || Objects.equals(entry, tombstone))) {
                 set.add(entry);
             }
         }
